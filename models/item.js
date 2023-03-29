@@ -19,7 +19,7 @@ const ItemSchema = new Schema({
         required: true,
     },
     price: {
-        type: Number,
+        type: String,
         required: true,
     },
     number_in_stock: {
