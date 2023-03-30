@@ -1,7 +1,34 @@
 const Category = require("../models/category");
+const Item = require("../models/item");
+
+const async = require("async");
 
 exports.index = (req, res) => {
-    res.send("NOT IMPLEMENTED: Site Home Page");
+    // res.send("NOT IMPLEMENTED: Site Home Page");
+    // Category.find().sort({ createdAt: -1 })
+    //     .then(result => {
+    //         res.render('index', { categories: result, title: 'All categories' });
+    //     })
+    //     .catch(err => {
+    //         console.log(err);
+    // });
+    async.parallel(
+      {
+        category_count(callback) {
+            Category.countDocuments({}, callback);
+        },
+        item_count(callback) {
+            Item.countDocuments({}, callback);
+        }
+      },
+      (err, results) => {
+        res.render("index", {
+            title: 'Dynamic Inventory',
+            error: err,
+            data: results,
+        })
+      }
+    )
 };
 
 // Display list of all categories

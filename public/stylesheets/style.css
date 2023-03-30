@@ -2,8 +2,33 @@ body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: #008dc5;
+  margin-inline: 200px;
+}
+
+nav .site-title h1{
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  color: #222;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+  align-items: center;
+}
+
+nav ul {
+  display: flex;
+  gap: 5em;
 }
 
 a {
-  color: #00B7FF;
+  color: whitesmoke;
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
 }
