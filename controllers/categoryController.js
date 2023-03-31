@@ -27,7 +27,7 @@ exports.index = (req, res) => {
 // Display list of all categories
 exports.category_list = (req, res, next) => {
     // res.send("NOT IMPLEMENTED: Category list");
-    Category.find({})
+    Category.find()
       .sort({name: 1})
       .exec(function (err, list_categories) {
         if (err) {

@@ -1,14 +1,41 @@
 const Item = require("../models/item");
-
+const Category = require("../models/category");
 
 // Display list of all items
 exports.item_list = (req, res) => {
-    res.send("NOT IMPLEMENTED: Item list");
+    // res.send("NOT IMPLEMENTED: Item list");
+    Item.find({}, "name")
+      .sort({name: 1})
+      .exec(function (err, list_items) 
+    {
+      if (err) {
+          return next(err);
+      }
+      //Successful, so render
+      res.render('item_list', {
+          title: "Item List",
+          item_list: list_items
+      })
+    })
 };
 
 // Display detail page for a specific item
-exports.item_detail = (req, res) => {
-    res.send(`NOT IMPLEMENTED: Item detail: ${req.params.id}`);
+exports.item_detail = (req, res, next) => {
+    // res.send(`NOT IMPLEMENTED: Item detail: ${req.params.id}`);
+    Item.findById(req.params.id)
+      .sort({name: 1})
+      .populate("category")
+      .exec(function (err, detail_items) 
+    {
+      if (err) {
+          return next(err);
+      }
+      //Successful, so render
+      res.render('item_detail', {
+          title: "Item Details",
+          item: detail_items
+      })
+    })
 };
 
 // Display item CREATE form on GET
