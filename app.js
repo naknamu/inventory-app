@@ -10,7 +10,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 
-const mongoDB = `mongodb+srv://${process.env.USER_KEY}:${process.env.PW_KEY}@cluster0.xj3bqjv.mongodb.net/?retryWrites=true&w=majority`;
+const mongoDB = `mongodb+srv://${process.env.USER_KEY}:${process.env.PW_KEY}@cluster0.xj3bqjv.mongodb.net/musical-instrument?retryWrites=true&w=majority`;
 
 main().catch(err => console.log(err));
 async function main() {

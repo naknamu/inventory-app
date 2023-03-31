@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('partials/head'); %>
+  </head>
+  <body>
+    <%- include('partials/nav'); %>
+
+    <h1><%= title %></h1>
+
+    <h2><%= category.name %></h2>
+    <p><%= category.description %></p>
+
+    <h3>Available Instruments</h3>
+    <% if (category_items.length === 0) { %>
+        <p>No instruments available here. :(</p>
+    <% } %>
+    <ul>
+      <% category_items.forEach(item => { %>
+        <li><a href=<%=item.url%>><%=item.name%></a></li>
+      <% }) %>
+    </ul>
+    
+  </body>
+</html>
