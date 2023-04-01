@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('partials/head'); %>
+  </head>
+  <body>
+    <%- include('partials/nav'); %>
+
+    <h1><%= title %></h1>
+
+    <form action="" method="post">
+
+        <div class="form-group">
+            <label for="name">Name: </label>
+            <input type="text" name="name" id="name" value=<%= (typeof item === "undefined") ? '' : item.name %>> 
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description: </label>
+            <textarea name="description" id="description" cols="30" rows="5" style="resize: none"><%= (typeof item === "undefined") ? '' : item.description %></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="category">Category: </label>
+            <select name="category" id="category">
+                <% category_list.forEach(category => { %>
+                    <option value=<%= category._id %> ><%= category.name %></option>
+                <% }) %>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="price">Price: </label>
+            <input type="text" name="price" id="price" value=<%= (typeof item === "undefined") ? '' : item.price %>> 
+        </div>
+
+        <div class="form-group">
+            <label for="number_in_stock">Number in stock: </label>
+            <input type="number" name="number_in_stock" id="number_in_stock" value=<%= (typeof item === "undefined") ? '' : item.number_in_stock %>> 
+        </div>
+
+        <button type="submit">Submit</button>
+
+    </form>
+
+    <% if (typeof errors !== "undefined") { %>
+        <h2>Error Messages: </h2>
+        <ul>
+            <% errors.forEach(error => { %>
+              <li><%= error.msg %></li>
+            <% }) %>
+         </ul>
+    <% } %>
+
+  </body>
+</html>

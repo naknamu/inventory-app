@@ -47,6 +47,7 @@ form{
   display: flex;
   flex-direction: column;
   gap: 10px;
+  align-items: flex-start;
 }
 
 label {
@@ -79,4 +80,15 @@ button {
 
 button:hover {
   background-color: rgb(41, 167, 167);
+}
+
+select {
+  padding: 12px;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 6px;
+  border: none;
+}
+
+select:focus {
+  outline: none;
 }
