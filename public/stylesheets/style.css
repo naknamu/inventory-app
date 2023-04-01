@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;700&display=swap');
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: #008dc5;
   margin-inline: 200px;
+  font-family: 'Poppins', sans-serif;
 }
 
 nav .site-title h1{
@@ -24,11 +27,56 @@ nav ul {
   gap: 5em;
 }
 
+nav li {
+  list-style: none;
+}
+
+
 a {
   color: moccasin;
   text-decoration: none;
 }
 
-nav li {
-  list-style: none;
+form{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+label {
+  font-weight: bold;
+  text-align: left;
+  font-size: 18px;
+}
+
+input, textarea {
+  padding: 16px;
+  border-radius: 6px;
+  border: none;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+}
+
+input:focus, textarea:focus {
+  border: none;
+  outline: none;
+}
+
+button {
+  padding: 18px 24px;
+  border-radius: 6px;
+  border: none;
+  align-self: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+button:hover {
+  background-color: rgb(41, 167, 167);
 }
