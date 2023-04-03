@@ -129,13 +129,71 @@ exports.category_create_post = [
 
 
 // Display Category DELETE form on GET
-exports.category_delete_get = (req, res) => {
-    res.send("NOT IMPLEMENTED: Category DELETE GET");
+exports.category_delete_get = (req, res, next) => {
+    // res.send("NOT IMPLEMENTED: Category DELETE GET");
+    async.parallel({
+        category(callback) {
+            Category.findById(req.params.id).exec(callback);
+        },
+
+        category_items(callback) {
+            Item.find({category: req.params.id}).exec(callback);
+        }
+    },
+    (err, results) => {
+        if (err) {
+            return next(err);
+        }
+        if (results.category == null) {
+            // No results
+            res.redirect("/inventory/categories");
+        }
+        // Successful, so render
+        res.render('category_delete', {
+            title: "Delete Category",
+            category: results.category,
+            category_items: results.category_items
+        })
+    }
+    )
 }
 
 // Handle Category DELETE on POST
-exports.category_delete_post = (req, res) => {
-    res.send("NOT IMPLEMENTED: Category DELETE POST");
+exports.category_delete_post = (req, res, next) => {
+    async.parallel(
+      {
+        category(callback) {
+            Category.findById(req.body.categoryid).exec(callback);
+        },
+        category_items(callback) {
+            Item.find({category: req.body.categoryid}).exec(callback);
+        },
+      },
+      (err, results) => {
+        if (err) {
+            return next(err);
+        }
+        // Success
+        if (results.category_items.length > 0) {
+            // Category has items. Render in same way as for GET route.
+            res.render('category_delete', {
+                title: "Delete Category",
+                category: results.category,
+                category_items: results.category_items
+            });
+            return;
+        }
+        // Category has no items. Delete category and redirect to the list of categories
+        Category.findByIdAndDelete(req.body.categoryid, (err) => {
+            if (err) {
+                return next(err);
+            }
+            // Success, go to category list
+            res.redirect("/inventory/categories")
+        })
+      }
+
+    )
 }
 
 // Display Category UPDATE form on GET
