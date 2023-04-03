@@ -76,10 +76,12 @@ button {
   align-self: center;
   font-size: 18px;
   font-weight: 700;
+  background-color: darkblue;
+  color: moccasin;
 }
 
 button:hover {
-  background-color: rgb(41, 167, 167);
+  background-color: rgba(0, 0, 139, 0.6);
 }
 
 select {

@@ -114,13 +114,40 @@ exports.item_create_post = [
 ];
 
 // Display item DELETE form on GET
-exports.item_delete_get = (req, res) => {
-    res.send("NOT IMPLEMENTED: Item DELETE GET");
+exports.item_delete_get = (req, res, next) => {
+    async.parallel({
+        item(callback) {
+            Item.findById(req.params.id)
+              .populate("category")
+              .exec(callback);
+        },
+    },
+    (err, results) => {
+        if (err) {
+            return next(err);
+        }
+        if (results.item == null) {
+            // No results
+            res.redirect("/inventory/items");
+        }
+        // Successful, so render
+        res.render('item_delete', {
+            title: "Delete Item",
+            item: results.item
+        })
+    })
 }
 
 // Handle item DELETE on POST
 exports.item_delete_post = (req, res) => {
-    res.send("NOT IMPLEMENTED: Item DELETE POST");
+    // Delete item and redirect to the list of items
+    Item.findByIdAndDelete(req.body.itemid, (err) => {
+        if (err) {
+            return next(err);
+        }
+        // Success, go to category list
+        res.redirect("/inventory/items")
+    })
 }
 
 // Display item UPDATE form on GET

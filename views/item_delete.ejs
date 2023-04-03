@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('partials/head'); %>
+  </head>
+  <body>
+    <%- include('partials/nav'); %>
+
+    <h1><%= title %>: <%= item.name %></h1>
+    <p>Description: <%= item.description %></p>
+    <p>Category: 
+        <a 
+          href=<%= item.category.url %>>
+          <%= item.category.name %>
+        </a> 
+    </p> 
+    <p>Price: <%= item.price %></p>
+    <p>Number in Stock: <%= item.number_in_stock %></p>
+
+    <h3>Do you really want to delete this item?</h3>
+
+    <form action="" method="post">
+    <input type="hidden" name="itemid" value=<%= item._id %>>
+    <button style="align-self: flex-start;" type="submit">Delete</button>
+    </form>
+
+  </body>
+</html>

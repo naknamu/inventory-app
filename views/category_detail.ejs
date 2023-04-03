@@ -20,8 +20,9 @@
         <li><a href=<%=item.url%>><%=item.name%></a></li>
       <% }) %>
     </ul>
-
-    <a href=<%= category.url + '/delete' %> >Delete category</a>
+    
+    <button><a href="/inventory/item/create">New Item</a></button>
+    <button><a href=<%= category.url + '/delete' %> >Delete category</a></button>
     
   </body>
 </html>
