@@ -23,9 +23,15 @@
         <div class="form-group">
             <label for="category">Category: </label>
             <select name="category" id="category">
+
                 <% category_list.forEach(category => { %>
-                    <option value=<%= category._id %> ><%= category.name %></option>
+                    <% if (item) { %>
+                        <option value=<%= category._id %> <%= category._id.toString()===item.category._id.toString() ? 'selected' : '' %> ><%= category.name %></option>
+                    <% } else { %>
+                        <option value=<%= category._id %> ><%= category.name %></option>
+                    <% } %>
                 <% }) %>
+
             </select>
         </div>
 

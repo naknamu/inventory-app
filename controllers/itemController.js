@@ -152,10 +152,84 @@ exports.item_delete_post = (req, res) => {
 
 // Display item UPDATE form on GET
 exports.item_update_get = (req, res) => {
-    res.send("NOT IMPLEMENTED: Item UPDATE GET");
+
+    async.parallel({
+        item(callback) {
+            Item.findById(req.params.id)
+              .populate("category")
+              .exec(callback);
+        },
+        category_list(callback) {
+            Category.find().exec(callback)
+        }
+    },
+    (err, results) => {
+        if (err) {
+            return next(err);
+        }
+
+        // Successful
+        res.render('item_form', {
+            title: "Update Item",
+            item: results.item,
+            category_list: results.category_list
+            })
+    }
+    );
 }
 
 // Handle item UPDATE on POST
-exports.item_update_post = (req, res) => {
-    res.send("NOT IMPLEMENTED: Item UPDATE GET");
-}
+exports.item_update_post = [
+    // Validate and sanitize the name field.
+    body("name", "Item name must not be empty.").trim().isLength({ min: 1 }).escape(),
+    body("description", "Item description must not be empty.").trim().isLength({ min: 1 }).escape(),
+    body("category").escape(),
+    body("price", "Item price must not be empty.").trim().isLength({ min: 1 }).escape(),
+    body("number_in_stock", "Item number in stock must not be empty.").trim().isLength({ min: 1 }).escape(),
+
+    // Process request after validation and sanitization
+    (req, res, next) => {
+        // Extract the validation errors from a request
+        const errors = validationResult(req);
+
+        //Create a category object with escaped and trimmed data
+        const item = new Item({
+            name: req.body.name, 
+            description: req.body.description,
+            category: req.body.category,
+            price: req.body.price,
+            number_in_stock: req.body.number_in_stock,
+            _id: req.params.id
+        });
+
+        // res.send(req.body.category);
+
+        if (!errors.isEmpty()) {
+            // There are errors. Render the form again with sanitized value/error messages
+            Category.find()
+              .sort({name: 1})
+              .exec(function(err, list_categories) {
+            if (err) {
+                return next(err);
+            }
+            // rerender
+            res.render("item_form", { 
+                title: "Update Item",
+                category_list: list_categories,
+                item,
+                errors: errors.array(),
+                });
+            })
+            return;
+        } 
+        // Data from form is valid. Update the record
+        Item.findByIdAndUpdate(req.params.id, item, {}, (err, theItem) => {
+            if (err) {
+              return next(err);
+            }
+      
+            // Successful: redirect to book detail page.
+            res.redirect(theItem.url);
+        });
+    }
+]
