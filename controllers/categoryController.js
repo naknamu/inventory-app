@@ -198,10 +198,57 @@ exports.category_delete_post = (req, res, next) => {
 
 // Display Category UPDATE form on GET
 exports.category_update_get = (req, res) => {
-    res.send("NOT IMPLEMENTED: Category UPDATE GET");
+
+    Category.findById(req.params.id)
+      .exec(function(err, category) {
+        if (err) {
+            return next(err);
+        }
+        // Successful
+        res.render('category_form', {
+            title: "Update Category",
+            category,
+        })
+      });
+    
 }
 
 // Handle Category UPDATE on POST
-exports.category_update_post = (req, res) => {
-    res.send("NOT IMPLEMENTED: Category UPDATE GET");
-}
+exports.category_update_post = [
+ // Validate and sanitize the name field.
+ body("name", "Category name must not be empty").trim().isLength({ min: 1 }).escape(),
+ body("description", "Category description must not be empty").trim().isLength({ min: 1 }).escape(),
+
+ // Process request after validation and sanitization
+ (req, res, next) => {
+     // Extract the validation errors from a request
+     const errors = validationResult(req);
+
+     //Create a category object with escaped and trimmed data
+     const category = new Category({
+        name: req.body.name, 
+        description: req.body.description,
+        _id: req.params.id //This is required, or a new ID will be assigned!
+     });
+
+     if (!errors.isEmpty()) {
+         // There are errors. Render the form again with sanitized value/error messages
+         res.render("category_form", {
+             title: "Create Category",
+             category,
+             errors: errors.array(),
+         })
+         return;
+     }
+
+     // Data from form is valid. Update the record
+     Category.findByIdAndUpdate(req.params.id, category, {}, (err, theCategory) => {
+        if (err) {
+            return next(err);
+        }
+
+        // Successful, redirect to detail page
+        res.redirect(theCategory.url);
+     })
+ }
+]
