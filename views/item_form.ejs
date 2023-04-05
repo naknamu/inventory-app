@@ -25,7 +25,7 @@
             <select name="category" id="category">
 
                 <% category_list.forEach(category => { %>
-                    <% if (item) { %>
+                    <% if (typeof item !== "undefined") { %>
                         <option value=<%= category._id %> <%= category._id.toString()===item.category._id.toString() ? 'selected' : '' %> ><%= category.name %></option>
                     <% } else { %>
                         <option value=<%= category._id %> ><%= category.name %></option>
