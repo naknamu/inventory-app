@@ -3,6 +3,17 @@ const Category = require("../models/category");
 
 const async = require("async");
 const { body, validationResult } = require("express-validator");
+const multer = require('multer');
+const myCustomStorage = require('../multer/storage')
+
+
+var storage = myCustomStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/' + file.originalname)
+    }
+})
+
+const upload = multer({ storage: storage })
 
 // Display list of all items
 exports.item_list = (req, res) => {
@@ -61,8 +72,17 @@ exports.item_create_get = (req, res) => {
 
 // Handle item CREATE on POST
 exports.item_create_post = [
-    // Validate and sanitize the name field.
+
+    // Upload image
+    upload.single('image'),
+
+    //Validate and sanitize the name field.
     body("name", "Item name must not be empty.").trim().isLength({ min: 1 }).escape(),
+    body("image")
+     .custom((value, {req}) => {
+        if (!req.file) throw new Error("Please upload an image");
+        return true;
+     }),
     body("description", "Item description must not be empty.").trim().isLength({ min: 1 }).escape(),
     body("category").escape(),
     body("price", "Item price must not be empty.").trim().isLength({ min: 1 }).escape(),
@@ -70,19 +90,19 @@ exports.item_create_post = [
 
     // Process request after validation and sanitization
     (req, res, next) => {
+
         // Extract the validation errors from a request
         const errors = validationResult(req);
 
-        //Create a category object with escaped and trimmed data
+        //Create an item object with escaped and trimmed data
         const item = new Item({
             name: req.body.name, 
+            image: req.file,
             description: req.body.description,
             category: req.body.category,
             price: req.body.price,
             number_in_stock: req.body.number_in_stock,
         });
-
-        // res.send(req.body.category);
 
         if (!errors.isEmpty()) {
             // There are errors. Render the form again with sanitized value/error messages
@@ -101,7 +121,8 @@ exports.item_create_post = [
                 });
             })
             return;
-        } 
+        }
+
         // Data from form is valid. Save item
         item.save((err) => {
             if (err) {
@@ -180,8 +201,17 @@ exports.item_update_get = (req, res) => {
 
 // Handle item UPDATE on POST
 exports.item_update_post = [
+
+    // Upload image
+    upload.single('image'),
+
     // Validate and sanitize the name field.
     body("name", "Item name must not be empty.").trim().isLength({ min: 1 }).escape(),
+    body("image")
+    .custom((value, {req}) => {
+       if (!req.file) throw new Error("Please upload an image");
+       return true;
+    }),
     body("description", "Item description must not be empty.").trim().isLength({ min: 1 }).escape(),
     body("category").escape(),
     body("price", "Item price must not be empty.").trim().isLength({ min: 1 }).escape(),
@@ -195,6 +225,7 @@ exports.item_update_post = [
         //Create a category object with escaped and trimmed data
         const item = new Item({
             name: req.body.name, 
+            image: req.file,
             description: req.body.description,
             category: req.body.category,
             price: req.body.price,

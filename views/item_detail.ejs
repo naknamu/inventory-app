@@ -9,6 +9,7 @@
     <h1><%= title %></h1>
 
     <h2><%= item.name %></h2>
+    <img src="/<%=item.image.path %>" alt="item preview">
     <p> <strong>Description:</strong>  <%= item.description %></p>
     <p> <strong>Category:</strong> <a href=<%= item.category.url %>><%= item.category.name %></a></p>
     <p> <strong>Price: </strong> <%= item.price %></p>

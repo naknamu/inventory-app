@@ -94,3 +94,7 @@ select {
 select:focus {
   outline: none;
 }
+
+img {
+  width: 300px;
+}

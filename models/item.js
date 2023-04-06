@@ -8,6 +8,10 @@ const ItemSchema = new Schema({
         required: true,
         maxLength: 50
     },
+    image: {
+        type: Object,
+        required: true,
+    },
     description: {
         type: String,
         required: true,
